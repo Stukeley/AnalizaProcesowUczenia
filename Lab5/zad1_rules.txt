@@ -1,0 +1,59 @@
+summary(ruleModel)
+
+Call:
+C5.0.formula(formula = Species ~ ., data = train_data, rules = TRUE)
+
+
+C5.0 [Release 2.07 GPL Edition]  	Mon May 15 14:29:11 2023
+-------------------------------
+
+Class specified by attribute `outcome'
+
+Read 105 cases (5 attributes) from undefined.data
+
+Rules:
+
+Rule 1: (34, lift 3.0)
+	Petal.Length <= 1.9
+	->  class setosa  [0.972]
+
+Rule 2: (30/1, lift 3.2)
+	Petal.Length > 1.9
+	Petal.Length <= 4.9
+	Petal.Width <= 1.7
+	->  class versicolor  [0.938]
+
+Rule 3: (35, lift 2.6)
+	Petal.Width > 1.7
+	->  class virginica  [0.973]
+
+Rule 4: (36/2, lift 2.4)
+	Petal.Length > 4.9
+	->  class virginica  [0.921]
+
+Default class: virginica
+
+
+Evaluation on training data (105 cases):
+
+	        Rules     
+	  ----------------
+	    No      Errors
+
+	     4    3( 2.9%)   <<
+
+
+	   (a)   (b)   (c)    <-classified as
+	  ----  ----  ----
+	    34                (a): class setosa
+	          29     2    (b): class versicolor
+	           1    39    (c): class virginica
+
+
+	Attribute usage:
+
+	 95.24%	Petal.Length
+	 61.90%	Petal.Width
+
+
+Time: 0.0 secs

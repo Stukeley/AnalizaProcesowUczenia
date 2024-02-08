@@ -1,0 +1,269 @@
+> # Autor: Rafal Klinowski, wariant: 1.
+> 
+> setwd('C:\\Users\\klino\\Pulpit\\Studia magisterskie\\APU\\Lab5')
+> 
+> # Instalacja mlr
+> install.packages("mlr")
+Error in install.packages : Updating loaded packages
+> library(mlr)
+> 
+> 
+> # Zadanie 1.
+> # Dataset: iris
+> library(datasets)
+> 
+> # Zaladowanie danych 'iris'
+> data(iris)
+> 
+> # Utworzenie klasyfikatora na podstawie gatunku 'species'
+> iris_task <- makeClassifTask(data = iris, target = "Species")
+> 
+> # Podzial danych na set treningowy i testowy (70% / 30%)
+> indices <- sample(1:nrow(iris), size = nrow(iris), replace = FALSE)
+> train_ratio <- 0.7
+> train_size <- floor(train_ratio * nrow(iris))
+> train_data <- iris[indices[1:train_size], ]
+> test_data <- iris[indices[(train_size + 1):nrow(iris)], ]
+> 
+> # Jakie sa dostepne learnery
+> # [1] "classif"    "cluster"    "multilabel" "regr"       "surv"      
+> levels(factor(listLearners()$type))
+Warning in listLearners.character() :
+  The following learners could not be constructed, probably because their packages are not installed:
+classif.ada,classif.adaboostm1,classif.bartMachine,classif.boosting,classif.bst,classif.cforest,classif.clusterSVM,classif.ctree,classif.cvglmnet,classif.dbnDNN,classif.dcSVM,classif.earth,classif.evtree,classif.fdausc.glm,classif.fdausc.kernel,classif.fdausc.knn,classif.fdausc.np,classif.FDboost,classif.fgam,classif.fnn,classif.gamboost,classif.gaterSVM,classif.gausspr,classif.gbm,classif.glmboost,classif.glmnet,classif.h2o.deeplearning,classif.h2o.gbm,classif.h2o.glm,classif.h2o.randomForest,classif.IBk,classif.J48,classif.JRip,classif.kknn,classif.ksvm,classif.LiblineaRL1L2SVC,classif.LiblineaRL1LogReg,classif.LiblineaRL2L1SVC,classif.LiblineaRL2LogReg,classif.LiblineaRL2SVC,classif.LiblineaRMultiClassSVC,classif.lssvm,classif.mda,classif.mlp,classif.naiveBayes,classif.nnTrain,classif.OneR,classif.pamr,classif.PART,classif.penalized,classif.plr,classif.plsdaCaret,classif.ranger,classi [... truncated]
+[1] "classif"    "cluster"    "multilabel" "regr"       "surv"      
+> 
+> # Utworzenie learnera i trening
+> learner <- makeLearner("classif.rpart")
+> model <- train(learner, iris_task)
+> 
+> # Ocena jakosci modelu
+> predictions <- predict(model, newdata = test_data)
+> 
+> performance <- performance(predictions, measures = list(acc))
+> print(performance)
+      acc 
+0.9555556 
+> 
+> summary(model)
+              Length Class           Mode     
+learner        15    classif.rpart   list     
+learner.model  14    rpart           list     
+task.desc      13    ClassifTaskDesc list     
+subset        150    -none-          numeric  
+features        4    -none-          character
+factor.levels   1    -none-          list     
+time            1    -none-          numeric  
+dump            0    -none-          NULL     
+> 
+> # Wykres
+> library(rpart.plot)
+> rpart.plot(getLearnerModel(model))
+Warning message:
+Cannot retrieve the data used to build the model (so cannot determine roundint and is.binary for the variables).
+To silence this warning:
+    Call rpart.plot with roundint=FALSE,
+    or rebuild the rpart model with model=TRUE. 
+> 
+> # Reguły klasyfikacyjne
+> ruleModel <- C5.0(Species ~ ., data=train_data, rules=TRUE)
+> ruleModel
+
+Call:
+C5.0.formula(formula = Species ~ ., data = train_data, rules = TRUE)
+
+Rule-Based Model
+Number of samples: 105 
+Number of predictors: 4 
+
+Number of Rules: 4 
+
+Non-standard options: attempt to group attributes
+
+> summary(ruleModel)
+
+Call:
+C5.0.formula(formula = Species ~ ., data = train_data, rules = TRUE)
+
+
+C5.0 [Release 2.07 GPL Edition]  	Mon May 15 14:52:47 2023
+-------------------------------
+
+Class specified by attribute `outcome'
+
+Read 105 cases (5 attributes) from undefined.data
+
+Rules:
+
+Rule 1: (32, lift 3.2)
+	Petal.Length <= 1.9
+	->  class setosa  [0.971]
+
+Rule 2: (37, lift 2.7)
+	Petal.Length > 1.9
+	Petal.Length <= 5
+	Petal.Width <= 1.7
+	->  class versicolor  [0.974]
+
+Rule 3: (32, lift 2.9)
+	Petal.Length > 5
+	->  class virginica  [0.971]
+
+Rule 4: (33/1, lift 2.8)
+	Petal.Width > 1.7
+	->  class virginica  [0.943]
+
+Default class: versicolor
+
+
+Evaluation on training data (105 cases):
+
+	        Rules     
+	  ----------------
+	    No      Errors
+
+	     4    1( 1.0%)   <<
+
+
+	   (a)   (b)   (c)    <-classified as
+	  ----  ----  ----
+	    32                (a): class setosa
+	          37     1    (b): class versicolor
+	                35    (c): class virginica
+
+
+	Attribute usage:
+
+	 96.19%	Petal.Length
+	 66.67%	Petal.Width
+
+
+Time: 0.0 secs
+
+> 
+> # Zadanie 2.
+> smartfony <- read.csv('smartfony.csv')
+> smartfony_reduced <- smartfony[,
++           c('pamiec_ram', 'pamiec_wbudowana', 'aparat_foto', 'cena', 'oceny_klientow')]
+> 
+> # Utworzenie klasyfikatora
+> smartfony_task <- makeClassifTask(data = smartfony_reduced, target = "oceny_klientow")
+> 
+> # Stworzenie 5 learnerow
+> install.packages("rFerns")
+WARNING: Rtools is required to build R packages but is not currently installed. Please download and install the appropriate version of Rtools before proceeding:
+
+https://cran.rstudio.com/bin/windows/Rtools/
+Instalowanie pakietu w ‘C:/Users/klino/AppData/Local/R/win-library/4.2’
+(ponieważ ‘lib’ nie jest określony)
+trying URL 'https://cran.rstudio.com/bin/windows/contrib/4.2/rFerns_5.0.0.zip'
+Content type 'application/zip' length 162666 bytes (158 KB)
+downloaded 158 KB
+
+pakiet ‘rFerns’ został pomyślnie rozpakowany oraz sumy MD5 zostały sprawdzone
+Warning in install.packages :
+  nie można usunąć poprzedniej instalacji pakietu ‘rFerns’
+Warning in install.packages :
+  problem copying C:\Users\klino\AppData\Local\R\win-library\4.2\00LOCK\rFerns\libs\x64\rFerns.dll to C:\Users\klino\AppData\Local\R\win-library\4.2\rFerns\libs\x64\rFerns.dll: Permission denied
+Warning in install.packages :
+  przywrócono ‘rFerns’
+
+Pobrane pakiety binarne są w
+	C:\Users\klino\AppData\Local\Temp\Rtmp8gldAC\downloaded_packages
+> install.packages("randomForest")
+Error in install.packages : Updating loaded packages
+> 
+> lrns <- makeLearners(c("lda","rpart", "C50","rFerns",
++                        "randomForest"), type = "classif")
+> 
+> porownanie <- benchmark(learners = lrns,
++                         tasks = smartfony_task,
++                         resampling = cv5)
+Task: smartfony_reduced, Learner: classif.lda
+Resampling: cross-validation
+Measures:             mmce      
+[Resample] iter 1:    0.0000000 
+[Resample] iter 2:    0.3333333 
+[Resample] iter 3:    0.3333333 
+[Resample] iter 4:    0.3333333 
+[Resample] iter 5:    0.3333333 
+
+
+Aggregated Result: mmce.test.mean=0.2666667
+
+
+Task: smartfony_reduced, Learner: classif.rpart
+Resampling: cross-validation
+Measures:             mmce      
+[Resample] iter 1:    0.0000000 
+[Resample] iter 2:    0.3333333 
+[Resample] iter 3:    0.3333333 
+[Resample] iter 4:    0.3333333 
+[Resample] iter 5:    0.0000000 
+
+
+Aggregated Result: mmce.test.mean=0.2000000
+
+
+Task: smartfony_reduced, Learner: classif.C50
+Resampling: cross-validation
+Measures:             mmce      
+[Resample] iter 1:    0.0000000 
+[Resample] iter 2:    0.3333333 
+[Resample] iter 3:    0.3333333 
+[Resample] iter 4:    0.3333333 
+[Resample] iter 5:    0.0000000 
+
+
+Aggregated Result: mmce.test.mean=0.2000000
+
+
+Task: smartfony_reduced, Learner: classif.rFerns
+Resampling: cross-validation
+Measures:             mmce      
+[Resample] iter 1:    1.0000000 
+[Resample] iter 2:    0.6666667 
+[Resample] iter 3:    0.6666667 
+[Resample] iter 4:    1.0000000 
+[Resample] iter 5:    1.0000000 
+
+
+Aggregated Result: mmce.test.mean=0.8666667
+
+
+Task: smartfony_reduced, Learner: classif.randomForest
+Resampling: cross-validation
+Measures:             mmce      
+[Resample] iter 1:    0.0000000 
+[Resample] iter 2:    0.3333333 
+[Resample] iter 3:    0.3333333 
+[Resample] iter 4:    0.3333333 
+[Resample] iter 5:    0.3333333 
+
+
+Aggregated Result: mmce.test.mean=0.2666667
+
+
+Warning message:
+In lda.default(x, grouping, ...) : grupa 1 jest pusta
+> 
+> # Wizualizacja oceny
+> learner <- c("lda", "rpart", "C50", "rFerns", "randomForest")
+> accuracy <- c(0.267, 0.2, 0.2, 0.867, 0.267)
+> 
+> data <- data.frame(learner, accuracy)
+> 
+> barplot(data$accuracy, names.arg = data$learner, ylim = c(0, 1), ylab = "Accuracy")
+> 
+> # Utworzenie finalnego modelu
+> smartfony_task <- makeClassifTask(data = smartfony_reduced, target = "oceny_klientow")
+> 
+> smartfony_train <- smartfony_reduced[1:12, ]
+> smartfony_test <- smartfony_reduced[13:15, ]
+> 
+> smartfony_learner <- makeLearner("classif.rFerns")
+> smartfony_model <- train(smartfony_learner, smartfony_task)
+> 
+> smartfony_predictions <- predict(smartfony_model, newdata = smartfony_test)
+> 
+> performance <- performance(smartfony_predictions, measures = list(acc))

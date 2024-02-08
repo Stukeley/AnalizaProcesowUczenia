@@ -1,0 +1,412 @@
+> # Autor: Rafal Klinowski, wariant: 1.
+> 
+> setwd('C:\\Users\\klino\\Pulpit\\Studia magisterskie\\APU\\Lab7')
+> 
+> # I
+> # Instalacja i zaimportowanie niezbednych pakietow
+> # install.packages(pkgs=c("tm", "SnowballC", "wordcloud", "RColorBrewer", "syuzhet", "ggplot2"))
+> library("tm")
+> library("SnowballC")
+> library("wordcloud")
+> library("RColorBrewer")
+> library("syuzhet")
+> library("ggplot2")
+> 
+> # Zaladowanie pliku - tekstu z wikipedii
+> # Strona: https://www.wikiwand.com/en/Machine_learning
+> text <- readLines("Machine_learning.txt")
+Warning message:
+In readLines("Machine_learning.txt") :
+  incomplete final line found on 'Machine_learning.txt'
+> TextDoc <- Corpus(VectorSource(text))
+> 
+> # Wyczyszczenie tekstu
+> toSpace <- content_transformer(function (x , pattern ) gsub(pattern, " ", x))
+> TextDoc <- tm_map(TextDoc, toSpace, "/")
+Warning message:
+In tm_map.SimpleCorpus(TextDoc, toSpace, "/") :
+  transformation drops documents
+> TextDoc <- tm_map(TextDoc, toSpace, "@")
+Warning message:
+In tm_map.SimpleCorpus(TextDoc, toSpace, "@") :
+  transformation drops documents
+> TextDoc <- tm_map(TextDoc, toSpace, "\\|")
+Warning message:
+In tm_map.SimpleCorpus(TextDoc, toSpace, "\\|") :
+  transformation drops documents
+> TextDoc <- tm_map(TextDoc, toSpace, "ˆa“")
+Warning message:
+In tm_map.SimpleCorpus(TextDoc, toSpace, "ˆa“") :
+  transformation drops documents
+> TextDoc <- tm_map(TextDoc, toSpace, ":")
+Warning message:
+In tm_map.SimpleCorpus(TextDoc, toSpace, ":") :
+  transformation drops documents
+> TextDoc <- tm_map(TextDoc, toSpace, ";")
+Warning message:
+In tm_map.SimpleCorpus(TextDoc, toSpace, ";") :
+  transformation drops documents
+> TextDoc <- tm_map(TextDoc, toSpace, ",")
+Warning message:
+In tm_map.SimpleCorpus(TextDoc, toSpace, ",") :
+  transformation drops documents
+> TextDoc <- tm_map(TextDoc, content_transformer(tolower))
+Warning message:
+In tm_map.SimpleCorpus(TextDoc, content_transformer(tolower)) :
+  transformation drops documents
+> TextDoc <- tm_map(TextDoc, removeNumbers)
+Warning message:
+In tm_map.SimpleCorpus(TextDoc, removeNumbers) :
+  transformation drops documents
+> TextDoc <- tm_map(TextDoc, removeWords, stopwords("english"))
+Warning message:
+In tm_map.SimpleCorpus(TextDoc, removeWords, stopwords("english")) :
+  transformation drops documents
+> TextDoc <- tm_map(TextDoc, removeWords, c("s", "company", "team"))
+Warning message:
+In tm_map.SimpleCorpus(TextDoc, removeWords, c("s", "company", "team")) :
+  transformation drops documents
+> TextDoc <- tm_map(TextDoc, removePunctuation)
+Warning message:
+In tm_map.SimpleCorpus(TextDoc, removePunctuation) :
+  transformation drops documents
+> TextDoc <- tm_map(TextDoc, stripWhitespace)
+Warning message:
+In tm_map.SimpleCorpus(TextDoc, stripWhitespace) :
+  transformation drops documents
+> TextDoc <- tm_map(TextDoc, stemDocument)
+Warning message:
+In tm_map.SimpleCorpus(TextDoc, stemDocument) :
+  transformation drops documents
+> TextDoc <- tm_map(TextDoc, content_transformer(
++   function(x) gsub(x, pattern = "mathemat", replacement = "math")))
+Warning message:
+In tm_map.SimpleCorpus(TextDoc, content_transformer(function(x) gsub(x,  :
+  transformation drops documents
+> TextDoc <- tm_map(TextDoc, content_transformer(
++   function(x) gsub(x, pattern = " r ", replacement = " Rlanguage ")))
+Warning message:
+In tm_map.SimpleCorpus(TextDoc, content_transformer(function(x) gsub(x,  :
+  transformation drops documents
+> 
+> # Budowanie macierzy dokumentu
+> TextDoc_dtm <- TermDocumentMatrix(TextDoc)
+> dtm_m <- as.matrix(TextDoc_dtm)
+> dtm_v <- sort(rowSums(dtm_m),decreasing=TRUE)
+> dtm_d <- data.frame(word = names(dtm_v),freq=dtm_v)
+> 
+> # Pokazanie 5 najczestszych slow
+> head(dtm_d, 5)
+               word freq
+learn         learn  266
+machin       machin  142
+data           data  108
+algorithm algorithm   78
+model         model   72
+> # learn, machin, data, algorithm, model
+> 
+> barplot(dtm_d[1:20,]$freq, las = 2, names.arg = dtm_d[1:20,]$word,
++         col ="lightgreen",
++         main ="20 najczestszych slow w artykule Machine learning",
++         ylab = "Czestotliwosc slow")
+> 
+> # Chmura slow
+> set.seed(1234)
+> wordcloud(words = dtm_d$word, freq = dtm_d$freq, scale=c(5,0.5),
++           min.freq = 1,
++           max.words=100, random.order=FALSE,
++           rot.per=0.40,
++           colors=brewer.pal(8, "Dark2"))
+> 
+> # Kojarzenie slow
+> findAssocs(TextDoc_dtm, terms = findFreqTerms(TextDoc_dtm, lowfreq = 30),
++            corlimit = 0.5)
+$learn
+numeric(0)
+
+$machin
+numeric(0)
+
+$data
+unsupervis 
+      0.52 
+
+$predict
+          team            aid            art         artist          award           chao 
+          0.58           0.55           0.55           0.55           0.55           0.55 
+     cinematch        cofound       collabor       competit          covid          crisi 
+          0.55           0.55           0.55           0.55           0.55           0.55 
+          cure          decad         doctor        ensembl        everyth           fine 
+          0.55           0.55           0.55           0.55           0.55           0.55 
+         grand           held          joint         khosla   labsresearch           lost 
+          0.55           0.55           0.55           0.55           0.55           0.55 
+   mediaservic    microsystem        million           movi        netflix           next 
+          0.55           0.55           0.55           0.55           0.55           0.55 
+         paint        pragmat         prefer          prize proenvironment        publish 
+          0.55           0.55           0.55           0.55           0.55           0.55 
+        realiz      rebellion         recent          short      smartphon       springer 
+          0.55           0.55           0.55           0.55           0.55           0.55 
+        street        thermal       unrecogn         viewer          vinod           wall 
+          0.55           0.55           0.55           0.55           0.55           0.55 
+           win          wrote           make           user 
+          0.55           0.55           0.51           0.50 
+
+$artifici
+   neuron   connect     cross      loos   proceed      sent  strength       sum threshold 
+     0.91      0.88      0.86      0.86      0.86      0.86      0.86      0.86      0.86 
+ transmit   travers     layer    signal     anoth       ann    weight    aggreg       edg 
+     0.86      0.86      0.85      0.83      0.79      0.77      0.76      0.76      0.76 
+    brain    biolog      node      last   decreas    travel   multipl    adjust    synaps 
+     0.74      0.71      0.61      0.60      0.60      0.60      0.54      0.53      0.53 
+    typic      real 
+     0.51      0.51 
+
+$network
+   bayesian       acycl      belief      condit         dag     diagram      diseas     protein 
+       0.72        0.72        0.72        0.72        0.72        0.72        0.72        0.72 
+    symptom uncertainti     graphic probabilist      neural    independ      direct     sequenc 
+       0.72        0.72        0.69        0.61        0.59        0.58        0.58        0.54 
+    presenc 
+       0.50 
+
+$model
+numeric(0)
+
+$comput
+numeric(0)
+
+$method
+   respect      basic  communiti     confus     easili outperform    overlap   reproduc 
+      0.66       0.66       0.66       0.66       0.66       0.66       0.66       0.66 
+   unavail   uninform      evalu  discoveri        kdd        key   knowledg      focus 
+      0.66       0.66       0.65       0.60       0.58       0.56       0.56       0.54 
+      mine     employ   properti    unknown   previous 
+      0.53       0.53       0.53       0.53       0.52 
+
+$perform
+replac 
+  0.51 
+
+$set
+   instanc       test   techniqu     abnorm  construct      inher likelihood    remaind 
+      0.66       0.64       0.59       0.53       0.53       0.53       0.53       0.53 
+      seem   unbalanc     normal 
+      0.53       0.53       0.51 
+
+$algorithm
+numeric(0)
+
+$train
+numeric(0)
+
+$use
+numeric(0)
+
+$can
+numeric(0)
+
+$exampl
+function 
+    0.53 
+
+$system
+constitut    racist 
+     0.52      0.52 
+
+> 
+> # Analiza sentymentu
+> # syuzhet
+> syuzhet_vector <- get_sentiment(text, method="syuzhet")
+> head(syuzhet_vector)
+[1] 0.8 0.0 0.0 0.4 0.0 0.0
+> summary(syuzhet_vector)
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+-3.7500  0.0000  0.0000  0.4974  0.7375  9.3500 
+> 
+> # bing
+> bing_vector <- get_sentiment(text, method="bing")
+> head(bing_vector)
+[1] 0 0 0 0 0 0
+> summary(bing_vector)
+    Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
+-9.00000  0.00000  0.00000  0.01477  0.00000  7.00000 
+> 
+> # affin
+> afinn_vector <- get_sentiment(text, method="afinn")
+> head(afinn_vector)
+[1] 0 0 0 0 0 0
+> summary(afinn_vector)
+    Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
+-11.0000   0.0000   0.0000   0.2215   0.0000  12.0000 
+> 
+> rbind(
++   sign(head(syuzhet_vector)),
++   sign(head(bing_vector)),
++   sign(head(afinn_vector))
++ )
+     [,1] [,2] [,3] [,4] [,5] [,6]
+[1,]    1    0    0    1    0    0
+[2,]    0    0    0    0    0    0
+[3,]    0    0    0    0    0    0
+> 
+> # W naszym przypadku tylko metoda syuzhet dala jakiekolwiek efekty
+> 
+> # Analiza emocji
+> d<-get_nrc_sentiment(as.vector(dtm_d$word)) # Analiza trwa bardzo dlugo
+> head (d,10)
+   anger anticipation disgust fear joy sadness surprise trust negative positive
+1      0            0       0    0   0       0        0     0        0        1
+2      0            0       0    0   0       0        0     0        0        0
+3      0            0       0    0   0       0        0     0        0        0
+4      0            0       0    0   0       0        0     0        0        0
+5      0            0       0    0   0       0        0     0        0        1
+6      0            0       0    0   0       0        0     0        0        0
+7      0            0       0    0   0       0        0     0        0        0
+8      0            0       0    0   0       0        0     0        0        0
+9      0            0       0    0   0       0        0     0        0        0
+10     0            0       0    0   0       0        0     0        0        0
+> 
+> td<-data.frame(t(d))
+> td_new <- data.frame(rowSums(td[1:56]))
+> names(td_new)[1] <- "count"
+> td_new <- cbind("sentiment" = rownames(td_new), td_new)
+> rownames(td_new) <- NULL
+> td_new2<-td_new[1:8,]
+> quickplot(sentiment, data=td_new2, weight=count, geom="bar", fill=sentiment,
++           ylab="count")+ggtitle("Survey sentiments")
+> 
+> barplot(
++   sort(colSums(prop.table(d[, 1:8]))),
++   horiz = TRUE,
++   cex.names = 0.7,
++   las = 1,
++   main = "Emotions in Text", xlab="Percentage"
++ )
+> 
+> # II
+> # Grafy powiazan
+> # install.packages(pkgs=c("tidytext", "igraph", "ggraph"))
+> library("tidytext")
+> library("igraph")
+> library("ggraph")
+> 
+> fileName <- "Machine_learning.txt"
+> text <- readChar(fileName, file.info(fileName)$size)
+> library(dplyr)
+> text_df <- data_frame(line = 1, text = text)
+> text_df
+# A tibble: 1 × 2
+   line text                                                                                    
+  <dbl> <chr>                                                                                   
+1     1 "Machine learning\r\n\r\nArticle\r\nTalk\r\nRead\r\nEdit\r\nView history\r\n\r\nTools\r…
+> 
+> library(tidytext)
+> tidy_text <- text_df %>%
++   unnest_tokens(word, text)
+> data(stop_words)
+> stop_words <- rbind(stop_words,de)
+> 
+> tidy_text <- tidy_text %>%
++   anti_join(stop_words)
+Joining with `by = join_by(word)`
+> 
+> tidy_text %>%
++   count(word, sort = TRUE)
+# A tibble: 1,899 × 2
+   word           n
+   <chr>      <int>
+ 1 learning     252
+ 2 machine      137
+ 3 data         109
+ 4 training      49
+ 5 algorithms    46
+ 6 model         39
+ 7 artificial    37
+ 8 set           33
+ 9 models        27
+10 neural        27
+# ℹ 1,889 more rows
+# ℹ Use `print(n = ...)` to see more rows
+> 
+> # Tworzenie bigramow
+> 
+> text_bigrams <- text_df %>%
++   unnest_tokens(bigram, text, token = "ngrams", n = 2)
+> text_bigrams
+# A tibble: 8,552 × 2
+    line bigram          
+   <dbl> <chr>           
+ 1     1 machine learning
+ 2     1 learning article
+ 3     1 article talk    
+ 4     1 talk read       
+ 5     1 read edit       
+ 6     1 edit view       
+ 7     1 view history    
+ 8     1 history tools   
+ 9     1 tools from      
+10     1 from wikipedia  
+# ℹ 8,542 more rows
+# ℹ Use `print(n = ...)` to see more rows
+> text_bigrams %>%
++   count(bigram, sort = TRUE)
+# A tibble: 6,471 × 2
+   bigram                  n
+   <chr>               <int>
+ 1 machine learning      123
+ 2 of the                 40
+ 3 in the                 33
+ 4 is a                   26
+ 5 learning algorithms    26
+ 6 can be                 21
+ 7 of machine             20
+ 8 learning is            19
+ 9 main article           19
+10 of a                   19
+# ℹ 6,461 more rows
+# ℹ Use `print(n = ...)` to see more rows
+> 
+> library(tidyr)
+> bigrams_separated <- text_bigrams %>%
++   separate(bigram, c("word1", "word2"), sep = " ")
+> bigrams_filtered <- bigrams_separated %>%
++   filter(!word1 %in% stop_words$word) %>%
++   filter(!word2 %in% stop_words$word)
+> 
+> bigram_counts <- bigrams_filtered %>%
++   count(word1, word2, sort = TRUE)
+> bigram_counts
+# A tibble: 2,072 × 3
+   word1        word2            n
+   <chr>        <chr>        <int>
+ 1 machine      learning       123
+ 2 learning     algorithms      26
+ 3 main         article         19
+ 4 supervised   learning        17
+ 5 training     data            14
+ 6 data         mining          13
+ 7 unsupervised learning        13
+ 8 artificial   intelligence    12
+ 9 neural       networks        12
+10 artificial   neural          10
+# ℹ 2,062 more rows
+# ℹ Use `print(n = ...)` to see more rows
+> 
+> bigrams_united <- bigrams_filtered %>%
++   unite(bigram, word1, word2, sep = " ")
+> bigrams_united
+# A tibble: 2,657 × 2
+    line bigram           
+   <dbl> <chr>            
+ 1     1 machine learning 
+ 2     1 learning article 
+ 3     1 article talk     
+ 4     1 talk read        
+ 5     1 read edit        
+ 6     1 edit view        
+ 7     1 view history     
+ 8     1 history tools    
+ 9     1 free encyclopedia
+10     1 machine learning 
+# ℹ 2,647 more rows
+# ℹ Use `print(n = ...)` to see more rows

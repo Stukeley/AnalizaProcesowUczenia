@@ -1,0 +1,83 @@
+> # Autor: Rafal Klinowski, wariant 1.
+> 
+> setwd("C:\\Users\\klino\\Pulpit\\Studia magisterskie\\APU\\Lab2")
+> 
+> # Zaladowanie danych
+> smartfony <- read.csv(file='smartfony.csv')
+> smartfony
+                      nazwy pamiec_ram pamiec_wbudowana aparat_foto cena liczba_opinii
+1  Samsung Galaxy S23 Ultra          8              256         200 6799             3
+2                 Xiaomi 13          8              256          50 4799             0
+3         Motorola moto G22          4               64          50  649            41
+4     Samsung Galaxy M33 5G          6              128          50 1299             6
+5      Motorola edge 30 neo          8              128          64 1699            16
+6         OPPO Find N2 Flip          8              256          50 4999             1
+7      Motorola moto G82 5G          6              128          50 1299            44
+8        Infinix SMART 6 HD          2               32           8  399             0
+9     Xiaomi Redmi Note 11s          6               64         108  999            28
+10 Samsung Galaxy S20 FE 5G          6              128          12 1999           313
+11            realme 9 Pro+          6              128          50 1444             7
+12  Motorola edge 20 pro 5G         12              256         108 2599            26
+13    Samsung Galaxy M23 5G          4              128          50  999            52
+14            OnePlus 11 5G         16              256          50 4599             7
+15      Samsung Galaxy S22+          8              128          50 4499            20
+   oceny_klientow         status_opinii
+1               5   mniej niz 50 opinii
+2               0                nie ma
+3               5   mniej niz 50 opinii
+4               5   mniej niz 50 opinii
+5               5   mniej niz 50 opinii
+6               1   mniej niz 50 opinii
+7               5   mniej niz 50 opinii
+8               0                nie ma
+9               5   mniej niz 50 opinii
+10              5 wiecej niz 100 opinii
+11              5   mniej niz 50 opinii
+12              5   mniej niz 50 opinii
+13              5         50-100 opinii
+14              5   mniej niz 50 opinii
+15              5   mniej niz 50 opinii
+> 
+> # AHP z GitHuba
+> install.packages("devtools")
+Error in install.packages : Updating loaded packages
+> install.packages("githubinstall")
+WARNING: Rtools is required to build R packages but is not currently installed. Please download and install the appropriate version of Rtools before proceeding:
+
+https://cran.rstudio.com/bin/windows/Rtools/
+Instalowanie pakietu w ‘C:/Users/klino/AppData/Local/R/win-library/4.2’
+(ponieważ ‘lib’ nie jest określony)
+trying URL 'https://cran.rstudio.com/bin/windows/contrib/4.2/githubinstall_0.2.2.zip'
+Content type 'application/zip' length 68928 bytes (67 KB)
+downloaded 67 KB
+
+pakiet ‘githubinstall’ został pomyślnie rozpakowany oraz sumy MD5 zostały sprawdzone
+
+Pobrane pakiety binarne są w
+	C:\Users\klino\AppData\Local\Temp\RtmpUF54tM\downloaded_packages
+> 
+> devtools::install_github("gluc/ahp", build_vignettes = TRUE)
+WARNING: Rtools is required to build R packages, but no version of Rtools compatible with R 4.2.2 was found. (Only the following incompatible version(s) of Rtools were found: 4.3.5550)
+
+Please download and install Rtools 4.2 from https://cran.r-project.org/bin/windows/Rtools/ or https://www.r-project.org/nosvn/winutf8/ucrt3/.
+Skipping install of 'ahp' from a github remote, the SHA1 (4a85f6e8) has not changed since last install.
+  Use `force = TRUE` to force installation
+> 
+> library(ahp)
+> 
+> # Stworzenie drugiego datasetu z uwzglednieniem tylko istotnych parametrow
+> # Istotne parametry: wyswietlacz, pamiec RAM, pamiec wbudowana, aparat foto, cena.
+> 
+> smartfony_reduced <- smartfony[, c("nazwy", "pamiec_ram", "pamiec_wbudowana",
++                                    "aparat_foto", "cena")]
+> 
+> write.csv(smartfony_reduced, file='smartfony_reduced.csv')
+> 
+> # Zaladowanie przygotowanego pliku zawierajacego AHP
+> # file.show("plik.ahp")
+> 
+> ahpTree <- Load("plik2.ahp")
+> 
+> # Przeliczenie modelu
+> Calculate(ahpTree)
+Error in node$parent$priority[, node$name] : subscript out of bounds

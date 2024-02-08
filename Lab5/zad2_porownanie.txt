@@ -1,0 +1,66 @@
+porownanie <- benchmark(learners = lrns,
++                         tasks = smartfony_task,
++                         resampling = cv5)
+Task: smartfony_reduced, Learner: classif.lda
+Resampling: cross-validation
+Measures:             mmce      
+[Resample] iter 1:    0.3333333 
+[Resample] iter 2:    0.3333333 
+[Resample] iter 3:    0.0000000 
+[Resample] iter 4:    0.3333333 
+[Resample] iter 5:    0.3333333 
+
+
+Aggregated Result: mmce.test.mean=0.2666667
+
+
+Task: smartfony_reduced, Learner: classif.rpart
+Resampling: cross-validation
+Measures:             mmce      
+[Resample] iter 1:    0.0000000 
+[Resample] iter 2:    0.3333333 
+[Resample] iter 3:    0.0000000 
+[Resample] iter 4:    0.3333333 
+[Resample] iter 5:    0.3333333 
+
+
+Aggregated Result: mmce.test.mean=0.2000000
+
+
+Task: smartfony_reduced, Learner: classif.C50
+Resampling: cross-validation
+Measures:             mmce      
+[Resample] iter 1:    0.0000000 
+[Resample] iter 2:    0.3333333 
+[Resample] iter 3:    0.0000000 
+[Resample] iter 4:    0.3333333 
+[Resample] iter 5:    0.3333333 
+
+
+Aggregated Result: mmce.test.mean=0.2000000
+
+
+Task: smartfony_reduced, Learner: classif.rFerns
+Resampling: cross-validation
+Measures:             mmce      
+[Resample] iter 1:    1.0000000 
+[Resample] iter 2:    0.6666667 
+[Resample] iter 3:    1.0000000 
+[Resample] iter 4:    0.6666667 
+[Resample] iter 5:    1.0000000 
+
+
+Aggregated Result: mmce.test.mean=0.8666667
+
+
+Task: smartfony_reduced, Learner: classif.randomForest
+Resampling: cross-validation
+Measures:             mmce      
+[Resample] iter 1:    0.3333333 
+[Resample] iter 2:    0.3333333 
+[Resample] iter 3:    0.0000000 
+[Resample] iter 4:    0.3333333 
+[Resample] iter 5:    0.3333333 
+
+
+Aggregated Result: mmce.test.mean=0.2666667

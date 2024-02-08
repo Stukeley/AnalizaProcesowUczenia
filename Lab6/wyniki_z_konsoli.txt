@@ -1,0 +1,118 @@
+> setwd('C:\\Users\\klino\\Pulpit\\Studia magisterskie\\APU\\Lab6')
+> # Instalacja TensorFlow
+> install.packages("tensorflow")
+Error in install.packages : Updating loaded packages
+> install.packages("tensorflow")
+WARNING: Rtools is required to build R packages but is not currently installed. Please download and install the appropriate version of Rtools before proceeding:
+
+https://cran.rstudio.com/bin/windows/Rtools/
+Warning in install.packages :
+  pakiet ‘tensorflow’ jest w użyciu i nie zostanie zainstalowany
+> library(tensorflow)
+> library(keras)
+> cifar <- dataset_cifar10()
+> X_train <- cifar$train$x
+> X_test <- cifar$test$x
+> y_train <- cifar$train$y
+> y_test <- cifar$test$y
+> # Konwersja wartosci pikseli do zakresu [0, 1]
+> # Liczba klas = 10
+> X_train <- X_train / 255
+> X_test <- X_test / 255
+> # Konwersja etykiet na kategorie
+> y_train <- to_categorical(y_train, num_classes = 10)
+> y_test <- to_categorical(y_test, num_classes = 10)
+> # Tworzenie modelu zgodnie z instrukcja laboratoryjna
+> model <- keras_model_sequential()
+> model <- model %>%
++   # Start with hidden 2D convolutional layer being fed 32x32 pixel images
++   layer_conv_2d(
++     filter = 16, kernel_size = c(3,3), padding = "same", 
++     input_shape = c(32, 32, 3)
++   ) %>%
++   layer_activation_leaky_relu(0.1) %>% 
++   
++   # Second hidden layer
++   layer_conv_2d(filter = 32, kernel_size = c(3,3)) %>%
++   layer_activation_leaky_relu(0.1) %>% 
++   
++   # Use max pooling
++   layer_max_pooling_2d(pool_size = c(2,2)) %>%
++   layer_dropout(0.25) %>%
++   
++   # 2 additional hidden 2D convolutional layers
++   layer_conv_2d(filter = 32, kernel_size = c(3,3), padding = "same") %>%
++   layer_activation_leaky_relu(0.1) %>% 
++   layer_conv_2d(filter = 64, kernel_size = c(3,3)) %>%
++   layer_activation_leaky_relu(0.1) %>% 
++   
++   # Use max pooling once more
++   layer_max_pooling_2d(pool_size = c(2,2)) %>%
++   layer_dropout(0.25) %>%
++   
++   # Flatten max filtered output into feature vector 
++   # and feed into dense layer
++   layer_flatten() %>%
++   layer_dense(256) %>%
++   layer_activation_leaky_relu(0.1) %>% 
++   layer_dropout(0.5) %>%
++   
++   # Outputs from dense layer are projected onto 10 unit output layer
++   layer_dense(10)
+> # Kompilowanie modelu
+> model %>% compile(
++   loss = "categorical_crossentropy",
++   optimizer = optimizer_adam(),
++   metrics = "accuracy"
++ )
+> # Informacje o modelu
+> summary(model)
+Model: "sequential_13"
+________________________________________________________________________________________________
+ Layer (type)                              Output Shape                          Param #        
+================================================================================================
+ dense_56 (Dense)                          (None, 32, 32, 256)                   1024           
+ dropout_50 (Dropout)                      (None, 32, 32, 256)                   0              
+ dense_55 (Dense)                          (None, 32, 32, 128)                   32896          
+ dropout_49 (Dropout)                      (None, 32, 32, 128)                   0              
+ dense_54 (Dense)                          (None, 32, 32, 64)                    8256           
+ dropout_48 (Dropout)                      (None, 32, 32, 64)                    0              
+ flatten_9 (Flatten)                       (None, 65536)                         0              
+ dense_53 (Dense)                          (None, 10)                            655370         
+================================================================================================
+Total params: 697,546
+Trainable params: 697,546
+Non-trainable params: 0
+________________________________________________________________________________________________
+
+> # Trenowanie modelu
+> # epochs=10 by zaoszczedzic czas (trenowanie trwa bardzo dlugo)
+> history <- model %>%
++   fit(X_train, y_train, epochs = 10, batch_size = 32,
++       validation_data = list(X_test,y_test), shuffle=TRUE)
+Epoch 1/10
+1563/1563 [==============================] - 517s 331ms/step - loss: 1.6196 - accuracy: 0.4261 - val_loss: 1.5044 - val_accuracy: 0.4657
+Epoch 2/10
+1563/1563 [==============================] - 550s 352ms/step - loss: 1.4572 - accuracy: 0.4895 - val_loss: 1.4407 - val_accuracy: 0.4943
+Epoch 3/10
+1563/1563 [==============================] - 548s 351ms/step - loss: 1.4011 - accuracy: 0.5109 - val_loss: 1.4308 - val_accuracy: 0.4991
+Epoch 4/10
+1563/1563 [==============================] - 531s 340ms/step - loss: 1.3532 - accuracy: 0.5278 - val_loss: 1.4383 - val_accuracy: 0.5012
+Epoch 5/10
+1563/1563 [==============================] - 539s 345ms/step - loss: 1.3105 - accuracy: 0.5444 - val_loss: 1.4396 - val_accuracy: 0.4955
+Epoch 6/10
+1563/1563 [==============================] - 546s 349ms/step - loss: 1.2654 - accuracy: 0.5621 - val_loss: 1.4790 - val_accuracy: 0.4842
+Epoch 7/10
+1563/1563 [==============================] - 535s 342ms/step - loss: 1.2261 - accuracy: 0.5750 - val_loss: 1.4771 - val_accuracy: 0.4885
+Epoch 8/10
+1563/1563 [==============================] - 541s 346ms/step - loss: 1.1856 - accuracy: 0.5886 - val_loss: 1.5016 - val_accuracy: 0.4888
+Epoch 9/10
+1563/1563 [==============================] - 541s 346ms/step - loss: 1.1356 - accuracy: 0.6080 - val_loss: 1.5740 - val_accuracy: 0.4768
+Epoch 10/10
+1563/1563 [==============================] - 543s 347ms/step - loss: 1.0947 - accuracy: 0.6212 - val_loss: 1.5773 - val_accuracy: 0.4788
+> # Ocena modelu
+> model %>%
++   evaluate(X_test, y_test)
+313/313 [==============================] - 19s 60ms/step - loss: 1.5773 - accuracy: 0.4788
+    loss accuracy 
+1.577312 0.478800

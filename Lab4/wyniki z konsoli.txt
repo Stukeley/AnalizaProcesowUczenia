@@ -1,0 +1,117 @@
+> # Autor: Rafal Klinowski, wariant: 1.
+> 
+> setwd('C:\\Users\\klino\\Pulpit\\Studia magisterskie\\APU\\Lab4')
+> 
+> # Zaladowanie danych o smartfonach (z lab1).
+> smartfony <- read.csv('smartfony.csv')
+> 
+> # Instalacja pakietu C50.
+> install.packages("C50")
+Error in install.packages : Updating loaded packages
+> library(C50)
+> 
+> # Konwersja wyjscia z drzewa (ocen klientow) na typ factor.
+> smartfony$oceny_klientow <- as.factor(smartfony$oceny_klientow)
+> 
+> # Stworzenie drzewa - prognozujemy oceny na podstawie innych wartosci.
+> tree <- C5.0(smartfony[, c('pamiec_ram', 'pamiec_wbudowana', 'aparat_foto', 'cena')],
++              smartfony[, 'oceny_klientow'])
+> 
+> # Wizualizacja drzewa.
+> plot(tree)
+> 
+> # Dane o drzewie.
+> summary(tree)
+
+Call:
+C5.0.default(x = smartfony[, c("pamiec_ram", "pamiec_wbudowana", "aparat_foto", "cena")], y
+ = smartfony[, "oceny_klientow"])
+
+
+C5.0 [Release 2.07 GPL Edition]  	Thu May  4 21:13:48 2023
+-------------------------------
+
+Class specified by attribute `outcome'
+
+Read 15 cases (5 attributes) from undefined.data
+
+Decision tree:
+ 5 (15/3)
+
+
+Evaluation on training data (15 cases):
+
+	    Decision Tree   
+	  ----------------  
+	  Size      Errors  
+
+	     1    3(20.0%)   <<
+
+
+	   (a)   (b)   (c)    <-classified as
+	  ----  ----  ----
+	                 2    (a): class 0
+	                 1    (b): class 1
+	                12    (c): class 5
+
+
+Time: 0.0 secs
+
+> 
+> # -----------------------------
+> # Powtorzenie powyzszego z podzialem na zbior treningowy i testowy.
+> # W celu ewaluacji drzewa.
+> 
+> smartfony_train <- smartfony[1:12,]
+> smartfony_test <- smartfony[13:15,]
+> 
+> vars <- c('pamiec_ram', 'pamiec_wbudowana', 'aparat_foto', 'cena')
+> 
+> tree <- C5.0(x=smartfony_train[, vars],
++              y=smartfony_train$oceny_klientow)
+> 
+> 
+> summary(tree)
+
+Call:
+C5.0.default(x = smartfony_train[, vars], y = smartfony_train$oceny_klientow)
+
+
+C5.0 [Release 2.07 GPL Edition]  	Thu May  4 21:13:48 2023
+-------------------------------
+
+Class specified by attribute `outcome'
+
+Read 12 cases (5 attributes) from undefined.data
+
+Decision tree:
+ 5 (12/3)
+
+
+Evaluation on training data (12 cases):
+
+	    Decision Tree   
+	  ----------------  
+	  Size      Errors  
+
+	     1    3(25.0%)   <<
+
+
+	   (a)   (b)   (c)    <-classified as
+	  ----  ----  ----
+	                 2    (a): class 0
+	                 1    (b): class 1
+	                 9    (c): class 5
+
+
+Time: 0.0 secs
+
+> 
+> plot(tree)
+> 
+> # Predykcja dla danych testowych.
+> predict(tree, newdata = smartfony_test[, vars], type="prob")
+           0          1    5
+13 0.1666667 0.08333334 0.75
+14 0.1666667 0.08333334 0.75
+15 0.1666667 0.08333334 0.75

@@ -1,0 +1,97 @@
+{
+    "name": "Kryteria",
+    "global_weight": 1.0,
+    "local_weight": 1.0,
+    "target_weights": {
+        "cena": 0.5,
+        "ram": 0.167,
+        "pamiec": 0.167,
+        "aparat": 0.167
+    },
+    "elements": {
+        "global_weights": {
+            "cena": 0.5,
+            "ram": 0.167,
+            "pamiec": 0.167,
+            "aparat": 0.167
+        },
+        "local_weights": {
+            "cena": 0.5,
+            "ram": 0.167,
+            "pamiec": 0.167,
+            "aparat": 0.167
+        },
+        "consistency_ratio": 0.0
+    }
+}
+[('Samsung Galaxy S23 Ultra', 'Xiaomi 13'), ('Samsung Galaxy S23 Ultra', 'Motorola moto G22'), ('Samsung Galaxy S23 Ultra', 'Samsung Galaxy M33 5G'), ('Samsung Galaxy S23 Ultra', 'Motorola edge 30 neo'), ('Samsung Galaxy S23 Ultra', 'OPPO Find N2 Flip'), ('Samsung Galaxy S23 Ultra', 'Motorola moto G82 5G'), ('Samsung Galaxy S23 Ultra', 'Infinix SMART 6 HD'), ('Samsung Galaxy S23 Ultra', 'Xiaomi Redmi Note 11s'), ('Samsung Galaxy S23 Ultra', 'Samsung Galaxy S20 FE 5G'), ('Xiaomi 13', 'Motorola moto G22'), ('Xiaomi 13', 'Samsung Galaxy M33 5G'), ('Xiaomi 13', 'Motorola edge 30 neo'), ('Xiaomi 13', 'OPPO Find N2 Flip'), ('Xiaomi 13', 'Motorola moto G82 5G'), ('Xiaomi 13', 'Infinix SMART 6 HD'), ('Xiaomi 13', 'Xiaomi Redmi Note 11s'), ('Xiaomi 13', 'Samsung Galaxy S20 FE 5G'), ('Motorola moto G22', 'Samsung Galaxy M33 5G'), ('Motorola moto G22', 'Motorola edge 30 neo'), ('Motorola moto G22', 'OPPO Find N2 Flip'), ('Motorola moto G22', 'Motorola moto G82 5G'), ('Motorola moto G22', 'Infinix SMART 6 HD'), ('Motorola moto G22', 'Xiaomi Redmi Note 11s'), ('Motorola moto G22', 'Samsung Galaxy S20 FE 5G'), ('Samsung Galaxy M33 5G', 'Motorola edge 30 neo'), ('Samsung Galaxy M33 5G', 'OPPO Find N2 Flip'), ('Samsung Galaxy M33 5G', 'Motorola moto G82 5G'), ('Samsung Galaxy M33 5G', 'Infinix SMART 6 HD'), ('Samsung Galaxy M33 5G', 'Xiaomi Redmi Note 11s'), ('Samsung Galaxy M33 5G', 'Samsung Galaxy S20 FE 5G'), ('Motorola edge 30 neo', 'OPPO Find N2 Flip'), ('Motorola edge 30 neo', 'Motorola moto G82 5G'), ('Motorola edge 30 neo', 'Infinix SMART 6 HD'), ('Motorola edge 30 neo', 'Xiaomi Redmi Note 11s'), ('Motorola edge 30 neo', 'Samsung Galaxy S20 FE 5G'), ('OPPO Find N2 Flip', 'Motorola moto G82 5G'), ('OPPO Find N2 Flip', 'Infinix SMART 6 HD'), ('OPPO Find N2 Flip', 'Xiaomi Redmi Note 11s'), ('OPPO Find N2 Flip', 'Samsung Galaxy S20 FE 5G'), ('Motorola moto G82 5G', 'Infinix SMART 6 HD'), ('Motorola moto G82 5G', 'Xiaomi Redmi Note 11s'), ('Motorola moto G82 5G', 'Samsung Galaxy S20 FE 5G'), ('Infinix SMART 6 HD', 'Xiaomi Redmi Note 11s'), ('Infinix SMART 6 HD', 'Samsung Galaxy S20 FE 5G'), ('Xiaomi Redmi Note 11s', 'Samsung Galaxy S20 FE 5G')]
+True
+{('Samsung Galaxy S23 Ultra', 'Xiaomi 13'): 1, ('Samsung Galaxy S23 Ultra', 'Motorola moto G22'): 5, ('Samsung Galaxy S23 Ultra', 'Samsung Galaxy M33 5G'): 3, ('Samsung Galaxy S23 Ultra', 'Motorola edge 30 neo'): 1, ('Samsung Galaxy S23 Ultra', 'OPPO Find N2 Flip'): 1, ('Samsung Galaxy S23 Ultra', 'Motorola moto G82 5G'): 3, ('Samsung Galaxy S23 Ultra', 'Infinix SMART 6 HD'): 7, ('Samsung Galaxy S23 Ultra', 'Xiaomi Redmi Note 11s'): 3, ('Samsung Galaxy S23 Ultra', 'Samsung Galaxy S20 FE 5G'): 3, ('Xiaomi 13', 'Motorola moto G22'): 5, ('Xiaomi 13', 'Samsung Galaxy M33 5G'): 3, ('Xiaomi 13', 'Motorola edge 30 neo'): 1, ('Xiaomi 13', 'OPPO Find N2 Flip'): 1, ('Xiaomi 13', 'Motorola moto G82 5G'): 3, ('Xiaomi 13', 'Infinix SMART 6 HD'): 7, ('Xiaomi 13', 'Xiaomi Redmi Note 11s'): 3, ('Xiaomi 13', 'Samsung Galaxy S20 FE 5G'): 3, ('Motorola moto G22', 'Samsung Galaxy M33 5G'): 0.3333333333333333, ('Motorola moto G22', 'Motorola edge 30 neo'): 0.2, ('Motorola moto G22', 'OPPO Find N2 Flip'): 0.2, ('Motorola moto G22', 'Motorola moto G82 5G'): 0.3333333333333333, ('Motorola moto G22', 'Infinix SMART 6 HD'): 3, ('Motorola moto G22', 'Xiaomi Redmi Note 11s'): 0.3333333333333333, ('Motorola moto G22', 'Samsung Galaxy S20 FE 5G'): 0.3333333333333333, ('Samsung Galaxy M33 5G', 'Motorola edge 30 neo'): 0.3333333333333333, ('Samsung Galaxy M33 5G', 'OPPO Find N2 Flip'): 0.3333333333333333, ('Samsung Galaxy M33 5G', 'Motorola moto G82 5G'): 1, ('Samsung Galaxy M33 5G', 'Infinix SMART 6 HD'): 5, ('Samsung Galaxy M33 5G', 'Xiaomi Redmi Note 11s'): 1, ('Samsung Galaxy M33 5G', 'Samsung Galaxy S20 FE 5G'): 1, ('Motorola edge 30 neo', 'OPPO Find N2 Flip'): 1, ('Motorola edge 30 neo', 'Motorola moto G82 5G'): 3, ('Motorola edge 30 neo', 'Infinix SMART 6 HD'): 7, ('Motorola edge 30 neo', 'Xiaomi Redmi Note 11s'): 3, ('Motorola edge 30 neo', 'Samsung Galaxy S20 FE 5G'): 3, ('OPPO Find N2 Flip', 'Motorola moto G82 5G'): 3, ('OPPO Find N2 Flip', 'Infinix SMART 6 HD'): 7, ('OPPO Find N2 Flip', 'Xiaomi Redmi Note 11s'): 3, ('OPPO Find N2 Flip', 'Samsung Galaxy S20 FE 5G'): 3, ('Motorola moto G82 5G', 'Infinix SMART 6 HD'): 5, ('Motorola moto G82 5G', 'Xiaomi Redmi Note 11s'): 1, ('Motorola moto G82 5G', 'Samsung Galaxy S20 FE 5G'): 1, ('Infinix SMART 6 HD', 'Xiaomi Redmi Note 11s'): 0.2, ('Infinix SMART 6 HD', 'Samsung Galaxy S20 FE 5G'): 0.2, ('Xiaomi Redmi Note 11s', 'Samsung Galaxy S20 FE 5G'): 1}
+True
+True
+True
+Podsumowanie AHP
+{'Infinix SMART 6 HD': 0.161, 'Samsung Galaxy S23 Ultra': 0.124, 'Motorola moto G22': 0.122, 'Xiaomi Redmi Note 11s': 0.122, 'Motorola edge 30 neo': 0.095, 'Motorola moto G82 5G': 0.083, 'Xiaomi 13': 0.083, 'OPPO Find N2 Flip': 0.082, 'Samsung Galaxy M33 5G': 0.078, 'Samsung Galaxy S20 FE 5G': 0.051}
+{
+    "name": "Kryteria",
+    "global_weight": 1.0,
+    "local_weight": 1.0,
+    "target_weights": {
+        "Infinix SMART 6 HD": 0.161,
+        "Samsung Galaxy S23 Ultra": 0.124,
+        "Motorola moto G22": 0.122,
+        "Xiaomi Redmi Note 11s": 0.122,
+        "Motorola edge 30 neo": 0.095,
+        "Motorola moto G82 5G": 0.083,
+        "Xiaomi 13": 0.083,
+        "OPPO Find N2 Flip": 0.082,
+        "Samsung Galaxy M33 5G": 0.078,
+        "Samsung Galaxy S20 FE 5G": 0.051
+    },
+    "elements": {
+        "global_weights": {
+            "cena": 0.5,
+            "ram": 0.167,
+            "pamiec": 0.167,
+            "aparat": 0.167
+        },
+        "local_weights": {
+            "cena": 0.5,
+            "ram": 0.167,
+            "pamiec": 0.167,
+            "aparat": 0.167
+        },
+        "consistency_ratio": 0.0,
+        "random_index": "Donegan & Dodd",
+        "count": 4,
+        "names": [
+            "ram",
+            "pamiec",
+            "aparat",
+            "cena"
+        ]
+    },
+    "children": {
+        "count": 4,
+        "names": [
+            "ram",
+            "pamiec",
+            "aparat",
+            "cena"
+        ]
+    },
+    "comparisons": {
+        "count": 6,
+        "input": {
+            "ram, pamiec": 1,
+            "ram, aparat": 1,
+            "ram, cena": 0.3333333333333333,
+            "pamiec, aparat": 1,
+            "pamiec, cena": 0.3333333333333333,
+            "aparat, cena": 0.3333333333333333
+        },
+        "computed": null
+    }
+}
+
+Process finished with exit code 0
